@@ -34,18 +34,43 @@ flowchart TD
     F --> G[Streamlit Dashboard]
 ```
 
-## Technologies Used
+## Libraries and Technologies Used
 
-| Technology | Why it's used |
-|---|---|
-| **Python 3.11+** | Core language for the entire project. |
-| **Pandas** | Flexible, fast data loading, column mapping, and text cleaning. |
-| **PySpark (local mode)** | Demonstrates DataFrame-based cleaning, null handling, de-duplication, and aggregation that scales beyond what pandas alone can comfortably handle — while still running entirely on a single machine (`local[*]`). |
-| **VADER Sentiment** | A lightweight, rule-based sentiment analyzer tuned for short, informal text like reviews. Runs fully offline, no model download or API key needed. |
-| **Scikit-learn (TF-IDF)** | Identifies the most distinctive words in positive vs. negative reviews without needing a large language model. |
-| **SQLite** | A zero-configuration, file-based database — perfect for a fully local project with no external database server. |
-| **Streamlit** | Turns the analysis into an interactive dashboard with minimal boilerplate. |
-| **Plotly** | Interactive charts (bar, pie/donut) for the dashboard. |
+### Runtime and data technologies
+
+| Library or technology | What it does | Why it is used here |
+|---|---|---|
+| **Python 3.11+** | Runs the pipeline, analysis modules, database layer, and dashboard. | Provides one language across the complete application and has a strong data-analysis ecosystem. |
+| **Pandas** (`pandas`) | Provides DataFrames for loading, transforming, filtering, grouping, and exporting tabular review data. | Handles flexible input schemas and review cleaning efficiently before and after Spark processing. |
+| **Apache Spark** (`pyspark`) | Provides distributed DataFrame processing, null handling, de-duplication, and aggregations. | Demonstrates a scalable big-data processing approach while running locally with `local[*]`. |
+| **Java Runtime** | Runs the Apache Spark engine. | PySpark requires a compatible Java runtime; Java 8, 11, 17, or 21 is supported by the project setup. |
+| **VADER Sentiment** (`vaderSentiment`) | Calculates positive, neutral, negative, and compound sentiment scores from review text. | It is lightweight, works well for short informal text, and runs locally without an API key or model download. |
+| **Scikit-learn** (`scikit-learn`) | Supplies `TfidfVectorizer` for term-frequency/inverse-document-frequency analysis. | Extracts distinctive positive and negative keywords without requiring an external language model. |
+| **SQLite** (`sqlite3`) | Stores processed reviews and product summaries in a file-based relational database. | Requires no database server, is easy to inspect locally, and fits this self-contained project. |
+| **Streamlit** (`streamlit`) | Serves the interactive web dashboard and its filters, tables, metrics, and visualizations. | Enables a usable local interface with minimal web application code. |
+| **Plotly Express** (`plotly`) | Creates interactive bar and donut charts. | Makes ratings, sentiment, product comparisons, and keyword results easy to explore in the dashboard. |
+
+### Python standard-library modules
+
+| Module | What it does | Why it is used here |
+|---|---|---|
+| **`os`** | Handles filesystem paths and environment-level file operations. | Supports dataset and database file handling. |
+| **`sys`** | Provides process-level controls such as clean exits and error reporting. | Lets the pipeline stop clearly when input data cannot be loaded. |
+| **`time`** | Measures elapsed time. | Reports pipeline execution duration. |
+| **`warnings`** | Controls Python warning output. | Keeps pipeline and dashboard output readable by suppressing non-actionable warnings. |
+| **`random`** | Generates pseudo-random values. | Supports creation of synthetic sample reviews when the loader needs demonstration data. |
+| **`datetime`** | Represents and formats dates and times. | Creates and normalizes review dates in generated and loaded data. |
+| **`re`** | Performs regular-expression text processing. | Cleans review text and normalizes whitespace and unwanted characters. |
+| **`html`** | Escapes and unescapes HTML entities. | Removes HTML markup artifacts from review text during preprocessing. |
+| **`tempfile`** | Creates temporary files and directories. | Provides Spark with safe temporary working locations. |
+| **`uuid`** | Generates universally unique identifiers. | Creates collision-resistant temporary paths for Spark processing. |
+
+### Build and environment support
+
+| Package or technology | What it does | Why it is used here |
+|---|---|---|
+| **`setuptools`** | Provides Python packaging and build support. | Keeps the dependency environment compatible with the project and PySpark tooling. |
+| **`venv`** | Creates an isolated Python environment. | Prevents project dependencies from conflicting with system-wide packages. |
 
 ## Installation
 
