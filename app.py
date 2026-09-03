@@ -168,14 +168,19 @@ def main():
                     "negative_percentage": "Negative %",
                 }[m],
             )
+            product_chart_df = summary_df.sort_values(metric_choice, ascending=False).head(15)
             fig_product = px.bar(
-                summary_df.sort_values(metric_choice, ascending=False),
-                x="product_name", y=metric_choice,
+                product_chart_df,
+                x=metric_choice, y="product_name", orientation="h",
                 labels={"product_name": "Product", metric_choice: metric_choice.replace("_", " ").title()},
                 color=metric_choice,
                 color_continuous_scale="Blues",
             )
-            fig_product.update_layout(xaxis_tickangle=-30)
+            fig_product.update_layout(
+                height=500,
+                yaxis={"categoryorder": "total ascending"},
+                margin={"l": 10, "r": 10, "t": 20, "b": 20},
+            )
             st.plotly_chart(fig_product, width='stretch')
         else:
             st.info("Product summary data is not available.")
