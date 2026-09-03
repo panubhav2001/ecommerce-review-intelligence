@@ -2,6 +2,8 @@
 
 Turning customer reviews into actionable business insights — fully local, no cloud, no API keys.
 
+Repository: https://github.com/panubhav2001/ecommerce-review-intelligence
+
 ## Project Overview
 
 Online retailers and product teams receive thousands of customer reviews, and manually reading through all of them to understand what customers like and dislike is impractical. Important signals — recurring complaints about delivery, praise for a particular feature, a product with unusually negative feedback — get lost in the noise.
@@ -12,7 +14,7 @@ This project builds a small, self-contained system that ingests raw product revi
 
 The project is a local Python pipeline plus a Streamlit dashboard:
 
-1. **Load** review data from a CSV file (flexible column mapping supports common formats, including the classic Amazon reviews schema).
+1. **Load** review data from the Amazon Fine Foods Reviews text file (the loader also supports CSV files with common review column names).
 2. **Clean** the text and the underlying data (missing values, duplicates, normalization).
 3. **Process at scale with PySpark**, demonstrating how the same cleaning and aggregation logic would scale to much larger datasets.
 4. **Score sentiment** for every review using VADER, a local rule-based sentiment model (no API key, no internet required).
@@ -24,7 +26,7 @@ The project is a local Python pipeline plus a Streamlit dashboard:
 
 ```mermaid
 flowchart TD
-    A[Dataset: data/reviews.csv] --> B[PySpark: local mode]
+    A[Dataset: data/foods.txt] --> B[PySpark: local mode]
     B --> C[Data Cleaning]
     C --> D[Sentiment Analysis - VADER]
     D --> E[Keyword Analysis - TF-IDF]
@@ -69,15 +71,21 @@ pip install -r requirements.txt
 
 > **Note:** PySpark requires a Java runtime (Java 8, 11, 17, or 21) to be installed and on your `PATH`. Most systems already have this; if not, install a JDK (e.g. from [Adoptium](https://adoptium.net/)) before running the pipeline.
 
-### 4. Run the pipeline
+### 4. Add the dataset
+
+Place the Amazon Fine Foods Reviews dataset at `data/foods.txt`. The dataset is intentionally not included in GitHub because it is approximately 354 MB. The expected format is the standard block-based format with fields such as `ProductId`, `ProfileName`, `Score`, `Time`, `Summary`, and `Text`.
+
+Alternatively, update `DATA_PATH` in `pipeline.py` to point to a compatible CSV file.
+
+### 5. Run the pipeline
 
 ```bash
 python pipeline.py
 ```
 
-This loads, cleans, and analyzes the review data, then saves the results into `database/reviews.db`. If `data/reviews.csv` doesn't exist yet, a small sample dataset is generated automatically so you can try the project immediately.
+This loads, cleans, and analyzes the review data, then saves the results into `database/reviews.db`.
 
-### 5. Run the dashboard
+### 6. Run the dashboard
 
 ```bash
 streamlit run app.py
@@ -87,7 +95,7 @@ This opens the dashboard in your browser (usually at `http://localhost:8501`).
 
 ## Dataset
 
-Place your review CSV at `data/reviews.csv`. The loader flexibly maps several common column naming conventions to a standard internal schema:
+The default pipeline input is `data/foods.txt`, using the Amazon Fine Foods Reviews format. For a CSV input, update `DATA_PATH` in `pipeline.py` and place the file in `data/`. The loader flexibly maps several common column naming conventions to a standard internal schema:
 
 | Standard column | Accepted variants (case-insensitive) |
 |---|---|
@@ -98,7 +106,7 @@ Place your review CSV at `data/reviews.csv`. The loader flexibly maps several co
 | `review_text` | `review_text`, `Text`, `review`, `body`, `content` |
 | `review_date` | `review_date`, `Time`, `date`, `timestamp` |
 
-> **Note:** `data/reviews.csv` is not included in this repository. If it's missing, `pipeline.py` automatically generates a small sample dataset (~900 synthetic reviews across 8 fictional products) purely for demonstration purposes — replace it with your own data for real analysis.
+> **Note:** Input datasets and generated database files are excluded by `.gitignore`. Keep local datasets out of source control, especially large review exports.
 
 ## Features
 
@@ -149,7 +157,7 @@ The following are intentionally *not* implemented in this version, but would be 
 ecommerce-review-intelligence/
 │
 ├── data/
-│   └── reviews.csv            # your dataset (auto-generated sample if missing)
+│   └── foods.txt              # local Amazon Fine Foods Reviews dataset (not tracked)
 │
 ├── database/
 │   └── reviews.db             # created by pipeline.py
