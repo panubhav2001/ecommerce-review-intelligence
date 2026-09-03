@@ -10,10 +10,12 @@ Run with:
 import warnings
 warnings.filterwarnings("ignore")
 
+import os
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from pipeline import run_pipeline
 from src.database import load_reviews_from_db, load_product_summary_from_db
 from src.keyword_analysis import get_keyword_analysis, keywords_to_dataframe
 from src.insights import generate_business_insights
@@ -32,6 +34,9 @@ st.set_page_config(
 # ----------------------------------------------------------------------
 @st.cache_data
 def load_data():
+    if not os.path.exists(DB_PATH):
+        with st.spinner("Preparing the demo review database..."):
+            run_pipeline()
     reviews_df = load_reviews_from_db(DB_PATH)
     summary_df = load_product_summary_from_db(DB_PATH)
     return reviews_df, summary_df

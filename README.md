@@ -118,6 +118,17 @@ streamlit run app.py
 
 This opens the dashboard in your browser (usually at `http://localhost:8501`).
 
+## Deploy on Streamlit Community Cloud
+
+The app is ready to deploy from the GitHub repository:
+
+1. Sign in at [share.streamlit.io](https://share.streamlit.io/) with GitHub.
+2. Select **New app** and choose `panubhav2001/ecommerce-review-intelligence`.
+3. Set the branch to `main` and the main file to `app.py`.
+4. Select **Deploy**. No secrets or environment variables are required.
+
+The generated SQLite database and large review datasets are excluded from GitHub. When the cloud app starts without `database/reviews.db`, it automatically runs the pipeline against the default sample input and creates a small demo database. For local analysis, keep your full dataset in `data/` and run `python pipeline.py` before starting Streamlit.
+
 ## Dataset
 
 The default pipeline input is `data/foods.txt`, using the Amazon Fine Foods Reviews format. For a CSV input, update `DATA_PATH` in `pipeline.py` and place the file in `data/`. The loader flexibly maps several common column naming conventions to a standard internal schema:
