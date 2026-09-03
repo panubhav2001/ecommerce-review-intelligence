@@ -114,7 +114,7 @@ The default pipeline input is `data/foods.txt`, using the Amazon Fine Foods Revi
 - **Rating distribution** bar chart.
 - **Sentiment distribution** donut chart.
 - **Sentiment by rating** stacked bar chart.
-- **Product comparison** chart (by rating, review count, positive %, or negative %).
+- **Product comparison** horizontal bar chart showing the top 15 products by average rating, review count, positive %, or negative %.
 - **Top positive / negative keyword** charts (TF-IDF).
 - **Sidebar filters:** product, rating, sentiment — all charts and tables update live.
 - **Review Explorer:** full-text keyword search across reviews, with sentiment/rating filters applied.
@@ -137,7 +137,7 @@ Review intelligence like this helps businesses:
 - **VADER is a rule-based sentiment model.** It works well for short, informal review text but can misjudge sarcasm, nuanced context, or domain-specific jargon.
 - **TF-IDF keyword analysis does not fully understand context** — it surfaces statistically important words, not verified causal relationships between a word and customer satisfaction.
 - **Dataset quality affects insights.** Garbage in, garbage out — mislabeled ratings or spam reviews will skew the analysis.
-- **Amazon scraping is not part of this project.** You must supply your own CSV dataset.
+- **Amazon scraping is not part of this project.** You must supply the Amazon Fine Foods Reviews text file or a compatible CSV dataset.
 - **The local SQLite database is intended for a project/demo environment**, not high-concurrency production use.
 
 ## Future Improvements
